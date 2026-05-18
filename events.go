@@ -31,7 +31,7 @@ type Event struct {
 	Type      string          `json:"t"`
 	RawData   json.RawMessage `json:"d"`
 	// Struct contains one of the other types in this file.
-	Struct interface{} `json:"-"`
+	Struct any `json:"-"`
 }
 
 // A Ready stores all data for the websocket READY event.

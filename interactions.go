@@ -134,7 +134,7 @@ type ApplicationCommandOption struct {
 type ApplicationCommandOptionChoice struct {
 	Name              string            `json:"name"`
 	NameLocalizations map[Locale]string `json:"name_localizations,omitempty"`
-	Value             interface{}       `json:"value"`
+	Value             any               `json:"value"`
 }
 
 // ApplicationCommandPermissions represents a single user or role permission for a command.
@@ -438,7 +438,7 @@ type ApplicationCommandInteractionDataOption struct {
 	Name string                       `json:"name"`
 	Type ApplicationCommandOptionType `json:"type"`
 	// NOTE: Contains the value specified by Type.
-	Value   interface{}                                `json:"value,omitempty"`
+	Value   any                                        `json:"value,omitempty"`
 	Options []*ApplicationCommandInteractionDataOption `json:"options,omitempty"`
 
 	// NOTE: autocomplete interaction only.

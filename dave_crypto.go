@@ -13,10 +13,10 @@ import (
 var errNotDAVEFrame = fmt.Errorf("not a DAVE frame")
 
 const (
-	daveTagSize                = 8
-	daveKeySize                = 16
-	daveExportLabel            = "Discord Secure Frames v0"
-	minSupplementalBytesSize   = daveTagSize + 1 + 1 + 2 // tag + nonce(min 1) + sizeB + magic = 12
+	daveTagSize              = 8
+	daveKeySize              = 16
+	daveExportLabel          = "Discord Secure Frames v0"
+	minSupplementalBytesSize = daveTagSize + 1 + 1 + 2 // tag + nonce(min 1) + sizeB + magic = 12
 )
 
 func encryptSecureFrame(frameCipher cipher.AEAD, nonce uint32, opusData []byte) []byte {
@@ -134,7 +134,7 @@ func newDAVECipher(key []byte) (cipher.AEAD, error) {
 
 func hashRatchetGetKey(baseSecret []byte, generation uint32) ([]byte, error) {
 	secret := baseSecret
-	for i := uint32(0); i < generation; i++ {
+	for i := range generation {
 		genCtx := make([]byte, 4)
 		binary.BigEndian.PutUint32(genCtx, i)
 		next, err := mls.ExpandWithLabel(secret, "secret", genCtx, 32)

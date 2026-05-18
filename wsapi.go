@@ -208,7 +208,7 @@ func (s *Session) Open() error {
 	// Create listening chan outside of listen, as it needs to happen inside the
 	// mutex lock and needs to exist before calling heartbeat and listen
 	// go rountines.
-	s.listening = make(chan interface{})
+	s.listening = make(chan any)
 
 	// Start sending heartbeats and reading messages from Discord.
 	go s.heartbeat(s.wsConn, s.listening, h.HeartbeatInterval)
@@ -220,7 +220,7 @@ func (s *Session) Open() error {
 
 // listen polls the websocket connection for events, it will stop when the
 // listening channel is closed, or an error occurs.
-func (s *Session) listen(wsConn *websocket.Conn, listening <-chan interface{}) {
+func (s *Session) listen(wsConn *websocket.Conn, listening <-chan any) {
 
 	s.log(LogInformational, "called")
 
@@ -293,7 +293,7 @@ func (s *Session) HeartbeatLatency() time.Duration {
 // heartbeat sends regular heartbeats to Discord so it knows the client
 // is still connected.  If you do not send these heartbeats Discord will
 // disconnect the websocket connection after a few seconds.
-func (s *Session) heartbeat(wsConn *websocket.Conn, listening <-chan interface{}, heartbeatIntervalMsec time.Duration) {
+func (s *Session) heartbeat(wsConn *websocket.Conn, listening <-chan any, heartbeatIntervalMsec time.Duration) {
 
 	s.log(LogInformational, "called")
 
@@ -534,7 +534,7 @@ func (s *Session) RequestGuildMembersBatchList(guildIDs []string, userIDs []stri
 }
 
 // GatewayWriteStruct allows for sending raw gateway structs over the gateway.
-func (s *Session) GatewayWriteStruct(data interface{}) (err error) {
+func (s *Session) GatewayWriteStruct(data any) (err error) {
 	s.RLock()
 	defer s.RUnlock()
 	if s.wsConn == nil {

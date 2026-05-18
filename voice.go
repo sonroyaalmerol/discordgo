@@ -365,7 +365,7 @@ func (v *VoiceConnection) websocket(ctx context.Context, endpoint string, token 
 	v.seqAck = -1
 	v.Cond.L.Unlock()
 
-	for i := 0; i < 100; i++ {
+	for i := range 100 {
 		select {
 		case <-ctx.Done():
 			return

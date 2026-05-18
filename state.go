@@ -14,6 +14,7 @@ package discordgo
 
 import (
 	"errors"
+	"slices"
 	"sort"
 	"sync"
 )
@@ -177,8 +178,9 @@ func (s *State) GuildRemove(guild *Guild) error {
 
 // Guild gets a guild by ID.
 // Useful for querying if @me is in a guild:
-//    _, err := discordgo.Session.State.Guild(guildID)
-//	  isInGuild := err == nil
+//
+//	   _, err := discordgo.Session.State.Guild(guildID)
+//		  isInGuild := err == nil
 func (s *State) Guild(guildID string) (*Guild, error) {
 	if s == nil {
 		return nil, ErrNilState
@@ -633,11 +635,8 @@ func (s *State) ThreadMembersUpdate(tmu *ThreadMembersUpdate) error {
 	defer s.Unlock()
 
 	for idx, member := range thread.Members {
-		for _, removedMember := range tmu.RemovedMembers {
-			if member.ID == removedMember {
-				thread.Members = append(thread.Members[:idx], thread.Members[idx+1:]...)
-				break
-			}
+		if slices.Contains(tmu.RemovedMembers, member.ID) {
+			thread.Members = append(thread.Members[:idx], thread.Members[idx+1:]...)
 		}
 	}
 
@@ -951,7 +950,7 @@ func (s *State) onReady(se *Session, r *Ready) (err error) {
 }
 
 // OnInterface handles all events related to states.
-func (s *State) OnInterface(se *Session, i interface{}) (err error) {
+func (s *State) OnInterface(se *Session, i any) (err error) {
 	if s == nil {
 		return ErrNilState
 	}

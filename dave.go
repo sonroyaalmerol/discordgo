@@ -134,19 +134,13 @@ func (d *DAVESession) HandleExecuteTransition(transitionID uint16) error {
 	}
 
 	if d.pendingVersion > 0 {
-		derivedNewKey := false
 		if d.hasPendingKey && d.exporterSecret != nil {
 			if err := d.deriveSenderKeyLocked(); err != nil {
 				return err
 			}
 			d.hasPendingKey = false
-			derivedNewKey = true
 		}
 		if d.senderKey == nil {
-			return nil
-		}
-
-		if !derivedNewKey && !d.hasPendingKey {
 			return nil
 		}
 
@@ -337,10 +331,10 @@ func (d *DAVESession) createReceiverLocked(ssrc uint32, userID string) (*daveRec
 	}
 
 	recv := &daveReceiver{
-		userID:     userID,
-		baseSecret: baseSecret,
-		key:        key,
-		aesBlock:   block,
+		userID:      userID,
+		baseSecret:  baseSecret,
+		key:         key,
+		aesBlock:    block,
 		frameCipher: fc,
 	}
 

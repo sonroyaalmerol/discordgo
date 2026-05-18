@@ -118,7 +118,7 @@ type Session struct {
 	wsConn *websocket.Conn
 
 	// When nil, the session is not listening.
-	listening chan interface{}
+	listening chan any
 
 	// sequence tracks the current gateway api websocket sequence number
 	sequence *int64
@@ -1839,8 +1839,8 @@ type AuditLogEntry struct {
 
 // AuditLogChange for an AuditLogEntry
 type AuditLogChange struct {
-	NewValue interface{}        `json:"new_value"`
-	OldValue interface{}        `json:"old_value"`
+	NewValue any                `json:"new_value"`
+	OldValue any                `json:"old_value"`
 	Key      *AuditLogChangeKey `json:"key"`
 }
 

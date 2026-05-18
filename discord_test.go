@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-//////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////// VARS NEEDED FOR TESTING
+// ////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////// VARS NEEDED FOR TESTING
 var (
 	dg    *Session // Stores a global discordgo user session
 	dgBot *Session // Stores a global discordgo bot session
@@ -125,7 +125,7 @@ func TestAddHandler(t *testing.T) {
 	}
 
 	interfaceHandlerCalled := int32(0)
-	interfaceHandler := func(s *Session, i interface{}) {
+	interfaceHandler := func(s *Session, i any) {
 		atomic.AddInt32(&interfaceHandlerCalled, 1)
 	}
 

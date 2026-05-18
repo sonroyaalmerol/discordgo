@@ -275,7 +275,7 @@ var (
 
 			// This example stores the provided arguments in an []interface{}
 			// which will be used to format the bot's response
-			margs := make([]interface{}, 0, len(options))
+			margs := make([]any, 0, len(options))
 			msgformat := "You learned how to use command options! " +
 				"Take a look at the value(s) you entered:\n"
 
@@ -350,7 +350,7 @@ var (
 			}
 			format := "- %s %s\n"
 
-			channels := ""
+			var channels strings.Builder
 			users := ""
 			roles := ""
 
@@ -367,9 +367,9 @@ var (
 					allChannels, _ := discordgo.GuildAllChannelsID(i.GuildID)
 
 					if o.ID == allChannels {
-						channels += fmt.Sprintf(format, emoji, "All channels")
+						channels.WriteString(fmt.Sprintf(format, emoji, "All channels"))
 					} else {
-						channels += fmt.Sprintf(format, emoji, "<#"+o.ID+">")
+						channels.WriteString(fmt.Sprintf(format, emoji, "<#"+o.ID+">"))
 					}
 				case discordgo.ApplicationCommandPermissionTypeRole:
 					if o.ID == i.GuildID {
@@ -394,7 +394,7 @@ var (
 								},
 								{
 									Name:  "Channels",
-									Value: channels,
+									Value: channels.String(),
 								},
 								{
 									Name:  "Roles",
