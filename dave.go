@@ -355,6 +355,15 @@ func (d *DAVESession) CanEncrypt() bool {
 	return d.active && d.frameCipher != nil
 }
 
+// Activate sets the DAVE session active flag so CanEncrypt returns true.
+// This is needed because Discord may not send OP22 (execute_transition)
+// when the bot is the only participant in the voice channel.
+func (d *DAVESession) Activate() {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	d.active = true
+}
+
 func (d *DAVESession) Reset() {
 	d.mu.Lock()
 	defer d.mu.Unlock()

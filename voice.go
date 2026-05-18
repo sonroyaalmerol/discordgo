@@ -1250,7 +1250,14 @@ func (v *VoiceConnection) handleDAVEBinary(message []byte) {
 		}
 
 		dave.HandlePrepareTransition(transitionID, 1)
-		v.log(LogInformational, "DAVE encryption prepared after Welcome")
+
+		// Activate DAVE immediately after deriving the sender key.
+		// Discord does NOT send OP22 (execute_transition) when the bot is
+		// the only participant in the voice channel, so we must activate here
+		// to ensure CanEncrypt() returns true and packets are DAVE-encrypted.
+		dave.Activate()
+
+		v.log(LogInformational, "DAVE encryption prepared after Welcome (canEncrypt=%v)", dave.CanEncrypt())
 
 		v.sendDAVEReadyForTransition(transitionID)
 
